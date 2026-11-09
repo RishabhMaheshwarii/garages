@@ -95,16 +95,60 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--primary); o
 .btn.danger { color: var(--danger); }
 .btn:disabled { opacity: .6; cursor: wait; }
 
-/* Service checkbox filter */
-.svc-filter { display: flex; flex-wrap: wrap; gap: 8px; }
-.svc-opt {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px;
-  font-size: .88rem; font-weight: 500; color: var(--text); cursor: pointer; user-select: none;
+/* Multi-select dropdown */
+.multiselect { position: relative; }
+.ms-toggle {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  font: inherit; color: var(--text); text-align: left; cursor: pointer;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 9px 11px;
 }
-.svc-opt input { width: auto; margin: 0; accent-color: var(--primary); }
-.svc-opt:has(input:checked) { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
-.svc-opt:first-child { font-weight: 700; }
+.ms-toggle:focus-visible, .ms-toggle[aria-expanded="true"] { outline: 2px solid var(--primary); outline-offset: -1px; border-color: transparent; }
+#svc-summary { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ms-caret { flex: none; color: var(--muted); transition: transform .15s; }
+.ms-toggle[aria-expanded="true"] .ms-caret { transform: rotate(180deg); }
+.ms-panel {
+  position: absolute; z-index: 1100; top: calc(100% + 6px); left: 0; right: 0; min-width: 260px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.15); padding: 6px;
+}
+.ms-list { max-height: 260px; overflow-y: auto; border-top: 1px solid var(--border); margin-top: 4px; padding-top: 4px; }
+.ms-opt {
+  display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 6px;
+  font-size: .92rem; font-weight: 500; color: var(--text); cursor: pointer; user-select: none;
+}
+.ms-opt:hover { background: var(--surface-2); }
+.ms-opt input { width: auto; margin: 0; accent-color: var(--primary); }
+.ms-all { font-weight: 700; }
+.ms-loading { display: flex; align-items: center; gap: 8px; padding: 10px; color: var(--muted); font-size: .9rem; }
+.ms-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; border-top: 1px solid var(--border); margin-top: 4px; padding: 8px 4px 2px; font-size: .8rem; }
+
+/* Loaders */
+.spinner {
+  display: inline-block; width: 16px; height: 16px; flex: none;
+  border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%;
+  animation: spin .7s linear infinite; vertical-align: -3px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.btn .spinner { width: 14px; height: 14px; margin-right: 6px; }
+.map-wrap { position: relative; }
+.map-loader {
+  position: absolute; top: 12px; left: 50%; transform: translateX(-50%); z-index: 500;
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--surface); color: var(--text); border: 1px solid var(--border);
+  padding: 8px 14px; border-radius: 999px; font-weight: 600; font-size: .88rem; box-shadow: var(--shadow);
+}
+.map-loader[hidden] { display: none; }
+.skeleton { pointer-events: none; }
+.skeleton .sk {
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--border) 50%, var(--surface-2) 75%);
+  background-size: 200% 100%; animation: shimmer 1.2s infinite; border-radius: 6px;
+}
+@keyframes shimmer { to { background-position: -200% 0; } }
+.sk-title { height: 16px; width: 55%; }
+.sk-line { height: 12px; width: 80%; margin: 10px 0; }
+.sk-chips { height: 22px; width: 90%; border-radius: 999px; }
+.loading-block { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 40px 12px; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { .spinner, .skeleton .sk { animation-duration: 2s; } }
 
 /* Find view */
 .search { display: flex; gap: 12px; align-items: flex-end; padding: 16px; flex-wrap: wrap; margin-bottom: 16px; }

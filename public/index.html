@@ -25,10 +25,23 @@
   <!-- FIND -->
   <main id="view-find" class="view active">
     <section class="search card">
-      <div class="field full">
-        <label>Services <span class="muted">(pick one or more — garages must offer all selected)</span></label>
-        <div id="f-services" class="svc-filter">
-          <label class="svc-opt"><input type="checkbox" id="f-all" checked /> All services</label>
+      <div class="field grow">
+        <label id="f-services-label">Services</label>
+        <div class="multiselect" id="svc-select">
+          <button type="button" class="ms-toggle" id="svc-toggle" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="f-services-label svc-summary">
+            <span id="svc-summary">All services</span>
+            <svg class="ms-caret" viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M5.3 7.3a1 1 0 0 1 1.4 0L10 10.6l3.3-3.3a1 1 0 1 1 1.4 1.4l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 0 1 0-1.4Z"/></svg>
+          </button>
+          <div class="ms-panel" id="svc-panel" role="listbox" aria-multiselectable="true" hidden>
+            <label class="ms-opt ms-all"><input type="checkbox" id="f-all" checked /> All services</label>
+            <div id="f-services" class="ms-list">
+              <div class="ms-loading"><span class="spinner"></span> Loading services…</div>
+            </div>
+            <div class="ms-foot">
+              <span class="muted">Garages must offer all selected</span>
+              <button type="button" class="btn small primary" id="svc-done">Done</button>
+            </div>
+          </div>
         </div>
       </div>
       <div class="field">
@@ -53,7 +66,10 @@
     </section>
 
     <section class="find-layout">
-      <div id="map" class="map card"></div>
+      <div class="map-wrap">
+        <div id="map" class="map card"></div>
+        <div id="map-loader" class="map-loader" hidden><span class="spinner"></span> Searching…</div>
+      </div>
       <div class="results">
         <div class="results-head">
           <h2 id="results-title">Nearby garages</h2>
