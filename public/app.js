@@ -85,12 +85,23 @@ function matchPopular(text, max = 8) {
 }
 
 // Free-text lookup via OpenStreetMap Nominatim (used only when no popular area matches).
+// Searches within India only (a bare number like 141001 otherwise matches postcodes in Russia/China).
+// 6-digit input is treated as an Indian PIN code.
+const isPincode = (text) => /^[1-9]\d{5}$/.test(text.replace(/\s+/g, ""));
 async function geocode(text) {
-  const qs = new URLSearchParams({ q: text, format: "json", limit: "1", addressdetails: "0" });
+  const pin = text.replace(/\s+/g, "");
+  const qs = new URLSearchParams({ format: "json", limit: "1", addressdetails: "1", countrycodes: "in" });
+  if (isPincode(pin)) qs.set("postalcode", pin);
+  else qs.set("q", text);
   const res = await fetch(`https://nominatim.openstreetmap.org/search?${qs}`, { headers: { Accept: "application/json" } });
   if (!res.ok) throw new Error("Location lookup failed");
   const [hit] = await res.json();
-  return hit ? { lat: Number(hit.lat), lng: Number(hit.lon), name: hit.display_name.split(",")[0] } : null;
+  if (!hit) return null;
+  // Human-readable place, e.g. "Ludhiana, Punjab" or "Punjab".
+  const a = hit.address || {};
+  const local = a.city || a.town || a.village || a.state_district || a.county || a.city_district || a.suburb;
+  const place = [...new Set([local, a.state].filter(Boolean))].join(", ") || hit.display_name.split(",")[0];
+  return { lat: Number(hit.lat), lng: Number(hit.lon), place };
 }
 
 // ---------- Tabs ----------
@@ -231,7 +242,7 @@ async function search() {
   if (!inDelhi(state.origin)) {
     state.results = [];
     $("#map-loader").hidden = true;
-    showComingSoon(state.originLabel);
+    showComingSoon(state.placeLabel || state.originLabel);
     return;
   }
 
@@ -350,7 +361,7 @@ function showComingSoon(place, notFound = false) {
     <li class="coming-soon">
       <div class="cs-icon">🚧</div>
       <h3>No garages are available ${notFound ? "for this location" : `in ${esc(place)}`}</h3>
-      <p>${notFound ? `We couldn't find “${esc(place)}”. ` : ""}We currently serve <b>Delhi</b> only. More cities are on the way.</p>
+      <p>${notFound ? `We couldn't find “${esc(place)}”. Try a Delhi area (e.g. Saket) or a Delhi PIN code (e.g. 110017).<br/>` : ""}We currently serve <b>Delhi</b> only. More cities are on the way.</p>
       <span class="cs-badge">Coming soon</span>
     </li>`;
   setButtonLoading($("#f-search"), false);
@@ -365,6 +376,7 @@ let locActive = -1;
 function setOrigin(coords, label) {
   state.origin = coords;
   state.originLabel = label;
+  state.placeLabel = null;
   locInput.value = label;
   document.querySelectorAll(".pop-chip").forEach((c) => c.classList.toggle("active", c.dataset.name === label));
 }
@@ -385,7 +397,7 @@ function renderLocList() {
   const searchRow = text && !locItems.some((a) => norm(a.name) === norm(text))
     ? `<li role="option" data-search="1" aria-selected="false">🔎 Search “${esc(text)}”</li>`
     : "";
-  locList.innerHTML = head + rows + searchRow;
+  locList.innerHTML = head + searchRow + rows;
   openLocList(Boolean(rows || searchRow));
 }
 
@@ -398,26 +410,31 @@ function pickArea(area) {
 // Typed text: popular-area match first, otherwise geocode. Anything outside Delhi → coming soon.
 async function resolveTyped(text) {
   openLocList(false);
-  const exact = POPULAR_AREAS.find((a) => norm(a.name) === norm(text)) || matchPopular(text, 1).find(() => norm(text).length >= 3);
+  // Only an exact popular-area name skips the lookup ("punjab" must NOT become "Punjabi Bagh").
+  const exact = POPULAR_AREAS.find((a) => norm(a.name) === norm(text));
   if (exact) return pickArea(exact);
 
-  ++searchSeq; // cancel any in-flight search rendering
+  const seq = ++searchSeq; // cancel any in-flight search rendering
   markers.clearLayers();
   $("#results").innerHTML = skeletonCards(2);
   $("#results-count").textContent = "Finding location…";
   setButtonLoading($("#f-search"), true, "Finding");
+  let hit = null;
   try {
-    const hit = await geocode(text);
-    if (!hit) {
-      state.originLabel = text;
-      return showComingSoon(text, true);
-    }
-    setOrigin([hit.lat, hit.lng], text);
-    search();
+    hit = await geocode(text);
   } catch {
-    state.originLabel = text;
-    showComingSoon(text, true);
+    hit = null;
   }
+  if (seq !== searchSeq) return; // a newer search started meanwhile
+  if (!hit) {
+    state.originLabel = text;
+    locInput.value = text;
+    return showComingSoon(text, true);
+  }
+  const label = isPincode(text) ? `${text.replace(/\s+/g, "")} · ${hit.place}` : text;
+  setOrigin([hit.lat, hit.lng], label);
+  state.placeLabel = hit.place;
+  search();
 }
 
 locInput.addEventListener("focus", () => {
