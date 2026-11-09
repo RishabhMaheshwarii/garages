@@ -14,15 +14,20 @@ app.use("/api/services", serviceRoutes);
 app.use((req, res) => res.status(404).json({ error: "Route not found" }));
 app.use(errorHandler);
 
-const PORT = Number(process.env.PORT) || 3000;
-const server = app.listen(PORT, () => {
-  console.log(`Garage API listening on http://localhost:${PORT}`);
-});
+// On Vercel the platform handles requests via the exported app; only listen locally.
+if (!process.env.VERCEL) {
+  const PORT = Number(process.env.PORT) || 3000;
+  const server = app.listen(PORT, () => {
+    console.log(`Garage API listening on http://localhost:${PORT}`);
+  });
 
-async function shutdown() {
-  server.close();
-  await prisma.$disconnect();
-  process.exit(0);
+  async function shutdown() {
+    server.close();
+    await prisma.$disconnect();
+    process.exit(0);
+  }
+  process.on("SIGINT", shutdown);
+  process.on("SIGTERM", shutdown);
 }
-process.on("SIGINT", shutdown);
-process.on("SIGTERM", shutdown);
+
+export default app;
