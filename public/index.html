@@ -25,16 +25,18 @@
   <!-- FIND -->
   <main id="view-find" class="view active">
     <section class="search card">
-      <div class="field grow">
-        <label for="f-service">Service</label>
-        <select id="f-service"><option value="">Any service</option></select>
+      <div class="field full">
+        <label>Services <span class="muted">(pick one or more — garages must offer all selected)</span></label>
+        <div id="f-services" class="svc-filter">
+          <label class="svc-opt"><input type="checkbox" id="f-all" checked /> All services</label>
+        </div>
       </div>
       <div class="field">
         <label for="f-radius">Radius</label>
         <select id="f-radius">
-          <option value="2">2 km</option>
+          <option value="3" selected>3 km</option>
           <option value="5">5 km</option>
-          <option value="10" selected>10 km</option>
+          <option value="10">10 km</option>
           <option value="25">25 km</option>
           <option value="50">50 km</option>
         </select>
@@ -66,10 +68,6 @@
   <main id="view-garages" class="view">
     <div class="view-head">
       <h1>Garages</h1>
-      <div class="row">
-        <label class="check"><input type="checkbox" id="g-inactive" /> Show inactive</label>
-        <button id="g-new" class="btn primary" type="button">+ New garage</button>
-      </div>
     </div>
     <div id="garage-list" class="grid"></div>
   </main>
@@ -78,57 +76,14 @@
   <main id="view-services" class="view">
     <div class="view-head">
       <h1>Services</h1>
-      <button id="s-new" class="btn primary" type="button">+ New service</button>
     </div>
     <div class="card table-wrap">
       <table class="table">
-        <thead><tr><th>Name</th><th>Description</th><th>Garages</th><th></th></tr></thead>
+        <thead><tr><th>Name</th><th>Description</th><th>Garages</th></tr></thead>
         <tbody id="service-rows"></tbody>
       </table>
     </div>
   </main>
-
-  <!-- Garage dialog -->
-  <dialog id="garage-dialog" class="dialog">
-    <form id="garage-form" method="dialog">
-      <h2 id="garage-dialog-title">New garage</h2>
-      <div class="form-grid">
-        <div class="field full"><label for="gf-name">Name *</label><input id="gf-name" required /></div>
-        <div class="field full"><label for="gf-address">Address</label><input id="gf-address" /></div>
-        <div class="field"><label for="gf-phone">Phone</label><input id="gf-phone" /></div>
-        <div class="field"><label class="check"><input type="checkbox" id="gf-active" checked /> Active</label></div>
-        <div class="field"><label for="gf-lat">Latitude *</label><input id="gf-lat" type="number" step="any" required /></div>
-        <div class="field"><label for="gf-lng">Longitude *</label><input id="gf-lng" type="number" step="any" required /></div>
-        <div class="full">
-          <div id="picker-map" class="picker-map"></div>
-          <p class="hint">Click the map to set the garage location.</p>
-        </div>
-        <div class="full">
-          <label>Services offered <span class="muted">(duration 1–54 min)</span></label>
-          <div id="gf-services" class="service-picks"></div>
-        </div>
-      </div>
-      <p id="garage-error" class="error"></p>
-      <div class="dialog-actions">
-        <button type="button" class="btn ghost" data-close>Cancel</button>
-        <button type="submit" class="btn primary">Save</button>
-      </div>
-    </form>
-  </dialog>
-
-  <!-- Service dialog -->
-  <dialog id="service-dialog" class="dialog small">
-    <form id="service-form" method="dialog">
-      <h2 id="service-dialog-title">New service</h2>
-      <div class="field"><label for="sf-name">Name *</label><input id="sf-name" required /></div>
-      <div class="field"><label for="sf-desc">Description</label><textarea id="sf-desc" rows="3"></textarea></div>
-      <p id="service-error" class="error"></p>
-      <div class="dialog-actions">
-        <button type="button" class="btn ghost" data-close>Cancel</button>
-        <button type="submit" class="btn primary">Save</button>
-      </div>
-    </form>
-  </dialog>
 
   <div id="toast" class="toast" role="status"></div>
 

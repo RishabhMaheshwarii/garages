@@ -196,6 +196,17 @@ export async function findNearbyGarages(req, res) {
       )`
     : Prisma.empty;
 
+  // serviceIds=1,4,7 — garage must offer every listed service.
+  const serviceIds = req.query.serviceIds
+    ? [...new Set(String(req.query.serviceIds).split(",").filter(Boolean).map(parseId))]
+    : [];
+  const allServicesFilter = serviceIds.length
+    ? Prisma.sql`AND (
+        SELECT count(*) FROM "GarageService" gs
+        WHERE gs."garageId" = g."id" AND gs."serviceId" IN (${Prisma.join(serviceIds)})
+      ) = ${serviceIds.length}`
+    : Prisma.empty;
+
   const rows = await prisma.$queryRaw`
     SELECT * FROM (
       SELECT
@@ -210,6 +221,7 @@ export async function findNearbyGarages(req, res) {
         AND g."lat" BETWEEN ${minLat} AND ${maxLat}
         AND (${lngFilter})
         ${serviceFilter}
+        ${allServicesFilter}
     ) candidates
     WHERE "distanceKm" <= ${radiusKm}
     ORDER BY "distanceKm" ASC

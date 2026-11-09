@@ -95,6 +95,17 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--primary); o
 .btn.danger { color: var(--danger); }
 .btn:disabled { opacity: .6; cursor: wait; }
 
+/* Service checkbox filter */
+.svc-filter { display: flex; flex-wrap: wrap; gap: 8px; }
+.svc-opt {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px;
+  font-size: .88rem; font-weight: 500; color: var(--text); cursor: pointer; user-select: none;
+}
+.svc-opt input { width: auto; margin: 0; accent-color: var(--primary); }
+.svc-opt:has(input:checked) { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
+.svc-opt:first-child { font-weight: 700; }
+
 /* Find view */
 .search { display: flex; gap: 12px; align-items: flex-end; padding: 16px; flex-wrap: wrap; margin-bottom: 16px; }
 .search .hint { margin: 0; }
