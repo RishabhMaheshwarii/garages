@@ -18,6 +18,8 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static("public"));
+// On Vercel, public/ is served by the CDN and "/" reaches this function, so send it to the page.
+app.get("/", (req, res) => res.redirect("/index.html"));
 
 app.get("/health", (req, res) => res.json({ ok: true }));
 app.use("/api/garages", garageRoutes);
