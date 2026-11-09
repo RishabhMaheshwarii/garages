@@ -1,5 +1,6 @@
 // Garage Finder frontend — talks to the Express API on the same origin.
-const API = "https://rishabhgarage.vercel.app/api";
+// Set via API_BASE_URL in .env (served by /config.js); falls back to the same server.
+const API = (window.APP_CONFIG?.apiBaseUrl || "/api").replace(/\/$/, "");
 const DEFAULT_CENTER = [28.6139, 77.209]; // New Delhi
 const MAX_DURATION = 54;
 

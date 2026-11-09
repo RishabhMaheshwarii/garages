@@ -17,6 +17,13 @@ app.use((req, res, next) => {
   next();
 });
 
+// Runtime config for the frontend, taken from env (API_BASE_URL defaults to same-origin /api).
+app.get("/config.js", (req, res) => {
+  const config = { apiBaseUrl: process.env.API_BASE_URL || "/api" };
+  res.type("application/javascript").set("Cache-Control", "no-store");
+  res.send(`window.APP_CONFIG = ${JSON.stringify(config)};`);
+});
+
 app.use(express.static("public"));
 // On Vercel, public/ is served by the CDN and "/" reaches this function, so send it to the page.
 app.get("/", (req, res) => res.redirect("/index.html"));
