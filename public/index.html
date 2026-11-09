@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Garage Finder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 2 2 7v13h6v-6h8v6h6V7L12 2Zm-2 14v4h4v-4h-4Z"/></svg>
+      <span>Garage Finder</span>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-view="find" role="tab">Find a garage</button>
+      <button class="tab" data-view="garages" role="tab">Garages</button>
+      <button class="tab" data-view="services" role="tab">Services</button>
+    </nav>
+  </header>
+
+  <!-- FIND -->
+  <main id="view-find" class="view active">
+    <section class="search card">
+      <div class="field grow">
+        <label for="f-service">Service</label>
+        <select id="f-service"><option value="">Any service</option></select>
+      </div>
+      <div class="field">
+        <label for="f-radius">Radius</label>
+        <select id="f-radius">
+          <option value="2">2 km</option>
+          <option value="5">5 km</option>
+          <option value="10" selected>10 km</option>
+          <option value="25">25 km</option>
+          <option value="50">50 km</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Location</label>
+        <button id="f-locate" class="btn ghost" type="button">📍 Use my location</button>
+      </div>
+      <div class="field">
+        <label>&nbsp;</label>
+        <button id="f-search" class="btn primary" type="button">Search</button>
+      </div>
+      <p class="hint full">Tip: click anywhere on the map to search from that point.</p>
+    </section>
+
+    <section class="find-layout">
+      <div id="map" class="map card"></div>
+      <div class="results">
+        <div class="results-head">
+          <h2 id="results-title">Nearby garages</h2>
+          <span id="results-count" class="muted"></span>
+        </div>
+        <ul id="results" class="result-list"></ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- GARAGES -->
+  <main id="view-garages" class="view">
+    <div class="view-head">
+      <h1>Garages</h1>
+      <div class="row">
+        <label class="check"><input type="checkbox" id="g-inactive" /> Show inactive</label>
+        <button id="g-new" class="btn primary" type="button">+ New garage</button>
+      </div>
+    </div>
+    <div id="garage-list" class="grid"></div>
+  </main>
+
+  <!-- SERVICES -->
+  <main id="view-services" class="view">
+    <div class="view-head">
+      <h1>Services</h1>
+      <button id="s-new" class="btn primary" type="button">+ New service</button>
+    </div>
+    <div class="card table-wrap">
+      <table class="table">
+        <thead><tr><th>Name</th><th>Description</th><th>Garages</th><th></th></tr></thead>
+        <tbody id="service-rows"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Garage dialog -->
+  <dialog id="garage-dialog" class="dialog">
+    <form id="garage-form" method="dialog">
+      <h2 id="garage-dialog-title">New garage</h2>
+      <div class="form-grid">
+        <div class="field full"><label for="gf-name">Name *</label><input id="gf-name" required /></div>
+        <div class="field full"><label for="gf-address">Address</label><input id="gf-address" /></div>
+        <div class="field"><label for="gf-phone">Phone</label><input id="gf-phone" /></div>
+        <div class="field"><label class="check"><input type="checkbox" id="gf-active" checked /> Active</label></div>
+        <div class="field"><label for="gf-lat">Latitude *</label><input id="gf-lat" type="number" step="any" required /></div>
+        <div class="field"><label for="gf-lng">Longitude *</label><input id="gf-lng" type="number" step="any" required /></div>
+        <div class="full">
+          <div id="picker-map" class="picker-map"></div>
+          <p class="hint">Click the map to set the garage location.</p>
+        </div>
+        <div class="full">
+          <label>Services offered <span class="muted">(duration 1–54 min)</span></label>
+          <div id="gf-services" class="service-picks"></div>
+        </div>
+      </div>
+      <p id="garage-error" class="error"></p>
+      <div class="dialog-actions">
+        <button type="button" class="btn ghost" data-close>Cancel</button>
+        <button type="submit" class="btn primary">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Service dialog -->
+  <dialog id="service-dialog" class="dialog small">
+    <form id="service-form" method="dialog">
+      <h2 id="service-dialog-title">New service</h2>
+      <div class="field"><label for="sf-name">Name *</label><input id="sf-name" required /></div>
+      <div class="field"><label for="sf-desc">Description</label><textarea id="sf-desc" rows="3"></textarea></div>
+      <p id="service-error" class="error"></p>
+      <div class="dialog-actions">
+        <button type="button" class="btn ghost" data-close>Cancel</button>
+        <button type="submit" class="btn primary">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

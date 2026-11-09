@@ -8,6 +8,17 @@ import { errorHandler } from "./src/utils/http.js";
 const app = express();
 app.use(express.json());
 
+// Allow the frontend to call the API from another origin (e.g. localhost during development).
+app.use((req, res, next) => {
+  res.set("Access-Control-Allow-Origin", "*");
+  res.set("Access-Control-Allow-Methods", "GET,POST,PATCH,PUT,DELETE,OPTIONS");
+  res.set("Access-Control-Allow-Headers", "Content-Type");
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  next();
+});
+
+app.use(express.static("public"));
+
 app.get("/health", (req, res) => res.json({ ok: true }));
 app.use("/api/garages", garageRoutes);
 app.use("/api/services", serviceRoutes);
