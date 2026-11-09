@@ -122,6 +122,44 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--primary); o
 .ms-loading { display: flex; align-items: center; gap: 8px; padding: 10px; color: var(--muted); font-size: .9rem; }
 .ms-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; border-top: 1px solid var(--border); margin-top: 4px; padding: 8px 4px 2px; font-size: .8rem; }
 
+/* Location search */
+.loc-field { min-width: 240px; }
+.loc-box { position: relative; }
+.loc-box input { padding-right: 42px; }
+.loc-gps {
+  position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
+  width: 34px; height: 34px; display: grid; place-items: center;
+  border: 0; border-radius: 6px; background: transparent; color: var(--primary); cursor: pointer;
+}
+.loc-gps:hover { background: var(--primary-soft); }
+.loc-gps:disabled { cursor: wait; }
+.loc-gps .spinner { margin: 0; }
+.loc-list {
+  position: absolute; z-index: 1100; top: calc(100% + 6px); left: 0; right: 0;
+  list-style: none; margin: 0; padding: 6px; max-height: 280px; overflow-y: auto;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+}
+.loc-list li { padding: 8px 10px; border-radius: 6px; cursor: pointer; display: flex; gap: 8px; align-items: center; }
+.loc-list li:hover, .loc-list li[aria-selected="true"] { background: var(--surface-2); }
+.loc-list li .muted { font-size: .8rem; margin-left: auto; }
+.loc-list .loc-head { cursor: default; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.loc-list .loc-head:hover { background: transparent; }
+.popular { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: .85rem; }
+.popular-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.pop-chip {
+  font: inherit; font-size: .82rem; cursor: pointer; color: var(--text);
+  background: var(--surface-2); border: 1px solid transparent; border-radius: 999px; padding: 4px 10px;
+}
+.pop-chip:hover, .pop-chip.active { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+
+/* Coming soon */
+.coming-soon { text-align: center; padding: 36px 16px; border: 1px dashed var(--border); border-radius: var(--radius); background: var(--surface); }
+.coming-soon .cs-icon { font-size: 2.2rem; line-height: 1; }
+.coming-soon h3 { margin: 12px 0 6px; font-size: 1.05rem; }
+.coming-soon p { margin: 0 0 14px; color: var(--muted); font-size: .9rem; }
+.cs-badge { display: inline-block; background: var(--primary-soft); color: var(--primary); font-weight: 700; font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; }
+
 /* Loaders */
 .spinner {
   display: inline-block; width: 16px; height: 16px; flex: none;
