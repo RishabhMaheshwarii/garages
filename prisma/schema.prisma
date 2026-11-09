@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// A physical garage location. Coordinates are WGS84 decimal degrees.
+// Geo lookups use a (lat, lng) B-tree index for a bounding-box prefilter,
+// then an exact great-circle (haversine) distance — see src/utils/geo.js.
+model Garage {
+  id        Int             @id @default(autoincrement())
+  name      String
+  address   String?
+  phone     String?
+  lat       Float
+  lng       Float
+  isActive  Boolean         @default(true)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  services  GarageService[]
+
+  @@index([lat, lng])
+}
+
+// Catalogue of service types (e.g. "Oil Change", "Brake Repair").
+model Service {
+  id          Int             @id @default(autoincrement())
+  name        String          @unique
+  description String?
+  garages     GarageService[]
+}
+
+// Which garage offers which service, with a garage-specific duration (< 55 min).
+model GarageService {
+  garageId        Int
+  serviceId       Int
+  durationMinutes Int
+
+  garage  Garage  @relation(fields: [garageId], references: [id], onDelete: Cascade)
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@id([garageId, serviceId])
+  // PK leads with garageId; this index serves "garages offering service X".
+  @@index([serviceId])
+}

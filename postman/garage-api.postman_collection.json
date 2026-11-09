@@ -1,0 +1,598 @@
+{
+  "info": {
+    "name": "Garage Services API",
+    "description": "Garage + service catalogue with lat/lng nearby search (Delhi data).\n\nEdit collection variables baseUrl, lat, lng. Start the server with `npm run dev`.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "lat",
+      "value": "28.6129"
+    },
+    {
+      "key": "lng",
+      "value": "77.2295"
+    },
+    {
+      "key": "garageId",
+      "value": "1"
+    },
+    {
+      "key": "serviceId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "health"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Nearby search (lat/lng)",
+      "description": "GET /api/garages/nearby: nearest garages within radius, sorted by distance, with all services and durationMinutes.",
+      "item": [
+        {
+          "name": "Nearby - 3 km",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/garages/nearby?lat={{lat}}&lng={{lng}}&radiusKm=3",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "garages",
+                "nearby"
+              ],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": "{{lat}}",
+                  "description": "User latitude (-90..90)"
+                },
+                {
+                  "key": "lng",
+                  "value": "{{lng}}",
+                  "description": "User longitude (-180..180)"
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "3"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Nearby - 5 km",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/garages/nearby?lat={{lat}}&lng={{lng}}&radiusKm=5",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "garages",
+                "nearby"
+              ],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": "{{lat}}",
+                  "description": "User latitude (-90..90)"
+                },
+                {
+                  "key": "lng",
+                  "value": "{{lng}}",
+                  "description": "User longitude (-180..180)"
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Nearby - 10 km",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/garages/nearby?lat={{lat}}&lng={{lng}}&radiusKm=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "garages",
+                "nearby"
+              ],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": "{{lat}}",
+                  "description": "User latitude (-90..90)"
+                },
+                {
+                  "key": "lng",
+                  "value": "{{lng}}",
+                  "description": "User longitude (-180..180)"
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Nearby - 5 km, by service name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/garages/nearby?lat={{lat}}&lng={{lng}}&radiusKm=5&service=Car Wash",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "garages",
+                "nearby"
+              ],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": "{{lat}}",
+                  "description": "User latitude (-90..90)"
+                },
+                {
+                  "key": "lng",
+                  "value": "{{lng}}",
+                  "description": "User longitude (-180..180)"
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "5"
+                },
+                {
+                  "key": "service",
+                  "value": "Car Wash",
+                  "description": "Service name, case-insensitive"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Nearby - 10 km, by serviceId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/garages/nearby?lat={{lat}}&lng={{lng}}&radiusKm=10&serviceId={{serviceId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "garages",
+                "nearby"
+              ],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": "{{lat}}",
+                  "description": "User latitude (-90..90)"
+                },
+                {
+                  "key": "lng",
+                  "value": "{{lng}}",
+                  "description": "User longitude (-180..180)"
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "10"
+                },
+                {
+                  "key": "serviceId",
+                  "value": "{{serviceId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Nearby - 10 km, nearest 2",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/garages/nearby?lat={{lat}}&lng={{lng}}&radiusKm=10&limit=2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "garages",
+                "nearby"
+              ],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": "{{lat}}",
+                  "description": "User latitude (-90..90)"
+                },
+                {
+                  "key": "lng",
+                  "value": "{{lng}}",
+                  "description": "User longitude (-180..180)"
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "10"
+                },
+                {
+                  "key": "limit",
+                  "value": "2",
+                  "description": "1..100, default 20"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Garages",
+      "item": [
+        {
+          "name": "List garages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/garages",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "garages"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List garages incl. inactive",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/garages?includeInactive=true",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "garages"
+              ],
+              "query": [
+                {
+                  "key": "includeInactive",
+                  "value": "true"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get garage",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/garages/{{garageId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "garages",
+                "{{garageId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create garage",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/garages",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "garages"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"delhi 11\",\n  \"address\": \"Hauz Khas, New Delhi\",\n  \"phone\": \"+91 98100 00000\",\n  \"lat\": 28.5494,\n  \"lng\": 77.2001,\n  \"services\": [\n    {\n      \"serviceId\": 1,\n      \"durationMinutes\": 30\n    },\n    {\n      \"serviceId\": 10,\n      \"durationMinutes\": 25\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "name, lat, lng required. services[].durationMinutes must be 1..54."
+          }
+        },
+        {
+          "name": "Update garage",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/garages/{{garageId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "garages",
+                "{{garageId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+91 98100 11111\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Send only fields to change. If `services` is included it REPLACES the garage's whole service list."
+          }
+        },
+        {
+          "name": "Delete garage",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/garages/{{garageId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "garages",
+                "{{garageId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Garage services",
+      "item": [
+        {
+          "name": "Add/update service at garage",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/garages/{{garageId}}/services/{{serviceId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "garages",
+                "{{garageId}}",
+                "services",
+                "{{serviceId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"durationMinutes\": 30\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "durationMinutes 1..54 (under 55 min)."
+          }
+        },
+        {
+          "name": "Remove service from garage",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/garages/{{garageId}}/services/{{serviceId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "garages",
+                "{{garageId}}",
+                "services",
+                "{{serviceId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Services",
+      "item": [
+        {
+          "name": "List services",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/services",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "services"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get service",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/services/{{serviceId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "services",
+                "{{serviceId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create service",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/services",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "services"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Engine Diagnostics\",\n  \"description\": \"OBD scan and report\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Update service",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/services/{{serviceId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "services",
+                "{{serviceId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Updated description\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete service",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/services/{{serviceId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "services",
+                "{{serviceId}}"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
